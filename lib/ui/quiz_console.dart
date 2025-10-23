@@ -11,7 +11,7 @@ class QuizConsole {
     print('--- Welcome to the Quiz ---\n');
 
       for (var question in quiz.questions) {
-      print('Question: ${question.title} (${question.points} point${question.points > 1 ? 's' : ''})');
+      print('Question: ${question.title} (${question.points} points)');
       print('Choices: ${question.choices}');
       stdout.write('Your answer: ');
       String? userInput = stdin.readLineSync();
@@ -29,10 +29,10 @@ class QuizConsole {
 
     int score = quiz.getScoreInPercentage();
     final earned = quiz.getEarnedPoints();
-    final total = quiz.getTotalPoints();
+    
     print('--- Quiz Finished ---');
     print('Your score: $score % correct');
-    print('Your Points is: $earned / $total');
+    print('Your Points is: $earned');
   }
 }
  
