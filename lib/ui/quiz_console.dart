@@ -3,36 +3,55 @@ import 'dart:io';
 import '../domain/quiz.dart';
 
 class QuizConsole {
-  Quiz quiz;
+  final Game game;
 
-  QuizConsole({required this.quiz});
+  QuizConsole({required this.game});
 
-  void startQuiz() {
-    print('--- Welcome to the Quiz ---\n');
+  void start() {
+    print('--- Welcome to the Multiplayer Quiz ---\n');
 
-      for (var question in quiz.questions) {
-      print('Question: ${question.title} (${question.points} points)');
-      print('Choices: ${question.choices}');
-      stdout.write('Your answer: ');
-      String? userInput = stdin.readLineSync();
-
-      // Check for null input
-      if (userInput != null && userInput.isNotEmpty) {
-        Answer answer = Answer(question: question, answerChoice: userInput);
-        quiz.addAnswer(answer);
-      } else {
-        print('No answer entered. Skipping question.');
+    while (true) {
+      stdout.write('Enter player name (empty to quit): ');
+      final name = stdin.readLineSync();
+      if (name == null || name.isEmpty) {
+        print('\nExiting. Last players scores:');
+        _printAllScores();
+        break;
       }
 
+      print('\nStarting quiz for: $name\n');
+
+      // collect answers for this player
+      final answers = <Answer>[];
+      for (var q in game.questions) {
+        print('Question: ${q.title} (${q.points} points)');
+        print('Choices: ${q.choices}');
+        stdout.write('Your answer: ');
+        final input = stdin.readLineSync() ?? '';
+        answers.add(Answer(question: q, answerChoice: input));
+        print('');
+      }
+
+      final submission = game.submitAnswers(name, answers);
+      print('--- Quiz Finished for $name ---');
+      print('Score: ${submission.percentage}%');
+      print('Points: ${submission.earnedPoints}/${submission.totalPoints}\n');
+
+      print('Last players:');
+      _printAllScores();
       print('');
     }
+  }
 
-    int score = quiz.getScoreInPercentage();
-    final earned = quiz.getEarnedPoints();
-    
-    print('--- Quiz Finished ---');
-    print('Your score: $score % correct');
-    print('Your Points is: $earned');
+  void _printAllScores() {
+    final subs = game.getAllSubmissions();
+    if (subs.isEmpty) {
+      print('  (no players yet)');
+      return;
+    }
+    for (var s in subs) {
+      print('  ${s.playerName}: ${s.percentage}% (${s.earnedPoints}/${s.totalPoints} points)');
+    }
   }
 }
  

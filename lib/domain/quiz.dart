@@ -53,3 +53,40 @@ class Quiz{
 
   }
 }
+
+/// Submission represents the result of a player playing the quiz once.
+class Submission {
+  final String playerName;
+  final int earnedPoints;
+  final int totalPoints;
+  final int percentage;
+
+  Submission({required this.playerName, required this.earnedPoints, required this.totalPoints, required this.percentage});
+}
+
+/// Game manages multiple players' submissions and keeps the last score per player.
+class Game {
+  final List<Question> questions;
+  final Map<String, Submission> lastScores = {};
+
+  Game({required this.questions});
+
+  /// Submit a list of answers for a player. Answers should reference the questions from this game.
+  Submission submitAnswers(String playerName, List<Answer> answers) {
+    final quiz = Quiz(questions: questions);
+    for (var a in answers) {
+      quiz.addAnswer(a);
+    }
+
+    final earned = quiz.getEarnedPoints();
+    final total = quiz.getTotalPoints();
+    final percentage = quiz.getScoreInPercentage();
+
+    final submission = Submission(playerName: playerName, earnedPoints: earned, totalPoints: total, percentage: percentage);
+    lastScores[playerName] = submission; // if exists
+    return submission;
+  }
+
+  /// Helper to get all last submissions
+  List<Submission> getAllSubmissions() => lastScores.values.toList();
+}

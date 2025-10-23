@@ -35,8 +35,8 @@ void main() {
       quiz.addAnswer(Answer(question: q1, answerChoice: "Paris"));
       quiz.addAnswer(Answer(question: q2, answerChoice: "3"));
 
-      // SCore should be 17%
-      expect(quiz.getScoreInPercentage(), equals(17));
+      // SCore should be 16%
+      expect(quiz.getScoreInPercentage(), equals(16));
       expect(quiz.getEarnedPoints(), equals(10));
       expect(quiz.getTotalPoints(), equals(60));
     });

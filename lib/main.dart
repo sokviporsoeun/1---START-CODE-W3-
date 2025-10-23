@@ -3,7 +3,7 @@ import 'ui/quiz_console.dart';
 
 void main() {
 
-  List<Question> questions = [
+  final questions = [
     Question(
         title: "Capital of France?",
         choices: ["Paris", "London", "Rome"],
@@ -16,8 +16,8 @@ void main() {
         points: 50),
   ];
 
-  Quiz quiz = Quiz(questions: questions);
-  QuizConsole console = QuizConsole(quiz: quiz);
+  final quiz = Quiz(questions: questions);
+  final console = QuizConsole(quiz: quiz);
 
   console.startQuiz();
 }
